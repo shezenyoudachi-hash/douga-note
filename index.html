@@ -97,6 +97,33 @@ footer h2{font-size:.95rem;margin:0;color:var(--ink)}
 footer a{color:var(--ink)}
 footer ul{margin:0;padding-left:1.2em}
 @media (prefers-reduced-motion:no-preference){.tile{transition:transform .12s}.tile:active{transform:scale(.97)}.pick{animation:pop .25s ease-out}@keyframes pop{from{transform:scale(.97)}to{transform:none}}}
+
+.qbtn{align-self:flex-start;appearance:none;border:2px dashed var(--cur);background:transparent;color:var(--cur);border-radius:999px;padding:8px 16px;font-family:var(--f-head);font-weight:900;font-size:1rem;cursor:pointer;display:inline-flex;gap:8px;align-items:center}
+.qbtn .best{font-size:.8rem;color:var(--hana)}
+.quiz{position:fixed;inset:0;z-index:11;background:rgba(10,16,14,.7);display:flex;align-items:center;justify-content:center;
+  padding:calc(env(safe-area-inset-top,0px) + 12px) 12px calc(env(safe-area-inset-bottom,0px) + 12px)}
+.qbox{width:min(640px,100%);max-height:100%;overflow:auto;background:var(--paper);color:var(--ink);border-radius:18px;padding:18px 18px 20px;display:flex;flex-direction:column;gap:14px;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.qhead b{font-family:var(--f-book);font-size:1.15rem;min-width:0}
+.qprog{font-size:.85rem;color:var(--soft);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.qq{margin:0;font-family:var(--f-book);font-weight:600;font-size:1.35rem;line-height:1.55}
+.qchoices{display:flex;flex-direction:column;gap:10px}
+.qc{appearance:none;text-align:left;border:3px solid var(--kokugo);background:var(--card);color:var(--ink);border-radius:14px;padding:12px 14px;font-family:var(--f-head);font-weight:700;font-size:1.05rem;line-height:1.5;cursor:pointer}
+.qc[disabled]{cursor:default}
+.qc.no{opacity:.4;border-style:dashed}
+.qc.yes{border-color:var(--hana);background:var(--hana);color:var(--paper)}
+.qc:focus-visible,.qbtn:focus-visible{outline:3px solid var(--hana);outline-offset:2px}
+.qmsg{border-radius:14px;padding:12px 14px;background:var(--card);border:2px solid var(--line);font-size:1rem;line-height:1.6}
+.qmsg strong{display:block;font-size:1.15rem;color:var(--hana)}
+.qmsg.hint strong{color:var(--soft)}
+.qfoot{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+.qfoot .btn.main{background:var(--kokugo);border-color:var(--kokugo);color:var(--paper)}
+.hanamaru{width:120px;height:120px;margin:0 auto;border-radius:50%;border:6px solid var(--hana);display:flex;align-items:center;justify-content:center;font-family:var(--f-book);font-size:2rem;font-weight:600;color:var(--hana);
+  -webkit-mask:conic-gradient(#000 0 335deg,transparent 335deg);mask:conic-gradient(#000 0 335deg,transparent 335deg)}
+.qend{text-align:center;display:flex;flex-direction:column;gap:10px}
+.qend p{margin:0;font-size:1.1rem;font-weight:700}
+@media (prefers-reduced-motion:no-preference){.qc.shake{animation:shake .3s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}}
 </style>
 </head>
 <body>
@@ -138,16 +165,22 @@ footer ul{margin:0;padding-left:1.2em}
     </div>
   </div>
 
+  <div class="quiz" id="quiz" hidden role="dialog" aria-modal="true" aria-labelledby="qtitle">
+    <div class="qbox" id="qbox"></div>
+  </div>
+
   <footer>
     <h2>おうちの方へ</h2>
     <p>絵を押すと、このページの中で動画が再生されます（おすすめ動画やコメントが出にくい再生方法です）。うまく再生できないときは、再生画面の下の「YouTubeでひらく」を使ってください。見た動画には はなまるが付きます。記録はこの端末のブラウザにだけ残ります。</p>
     <p>動画はすべて、茨城県教育委員会「いばらきオンラインスタディ」、千葉県教育委員会「チーてれスタディーネット」、群馬県教育委員会「オンラインサポート授業動画」が無料で公開しているものです。一覧は九州大学 佐々木玲仁研究室／ヤギ製作所の「<a href="https://eljh-class.sasakireijiyagi.com/" target="_blank" rel="noopener">授業動画は，ここにある</a>」（2026年9月4日確認版）から小学2年生の分を抜き出しました。多くは2020〜2022年の制作で、教科書の改訂で単元の順番がずれていることがあります。</p>
+    <p>こくごの「もんだいに ちょうせん」は、教科書のお話の内容をもとに作った問題です（本文は載せていません）。動画の先生の説明と聞き方がちがうことがあります。</p>
     <p>NHK for School や eboard の動画はここには入っていません。<a href="https://www.nhk.or.jp/school/" target="_blank" rel="noopener">NHK for School</a> は直接ひらいてください。</p>
   </footer>
 </div>
 
 <script>
 const GROUPS = [{"s":"国語","p":"ibaraki","b":"光村図書","u":"じゅんばんに ならぼう","v":[["NE90bh_1NkI",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"ふきのとう","v":[["50R2REhRDOs","①"],["FievhFob-Zg","②"],["aDcLiIzEk7k","③"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"図書館たんけん","v":[["t1hBHS6d0h4",""],["UC-vdf_hrx0",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"春が いっぱい","v":[["Zkpy-OZCZ6w",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"きょうの できごと","v":[["2RDWpkqgSRM","①"],["1u__j63fk98","②"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"いなばの白うさぎ","v":[["eBcN9SBp-BI",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"たんぽぽの ちえ","v":[["CY6QBlLDnvc","①"],["gJfqyaBq3aA","②"],["9evAxn4vwNE","③"],["41bLhvrpxBw","④"],["sgjiBwO1X38","⑤"],["oe7O2Y8WqfA","⑥"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"かんさつ名人に なろう","v":[["5ElW9PXLRA0","①"],["2BTy_oK17M8","②"],["8GwLE3JNTnE","③"],["UxuQXynVJBQ","④"],["4Xvshxc-9Ls","⑤"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"同じ ぶぶんを もつ かん字","v":[["vg4BkDVTdiw",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"うれしいことば","v":[["JYFwNZUyZWM",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"かん字のひろば1","v":[["0PMqfoT21es",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"スイミー","v":[["aSJc3eC1z1Y","④"],["vcj0HVaQmq4","⑤"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"かたかなのひろば","v":[["Np_RIz-CtKY",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"〔じょうほう〕メモを とる とき","v":[["fih7cz_H5T0",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"こんなもの、見つけたよ","v":[["qDFdwM9CQA4",""]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"お気に入りの本をしょうかいしよう","v":[["frO7uheiPBQ","①"],["f5kcHUbwWyc","②"],["nIUTJ7K6UH0","③"],["SU85KwYubHc","④"],["6Skro-blmL8","⑤"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"どうぶつ園のじゅうい","v":[["mfyPT_Cttjg","①"],["SsfdiWegnbQ","②"],["CFlgWy6sBfQ","③"],["q1yGXfKzSxo","④"],["HBpe3sGT3t8","⑤"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"お手紙","v":[["KCx170IhFDk","①"],["89yXuObgCwM","②"],["Qpo-nsFaEbQ","③"],["QMcAWk8HygQ","④"],["5InM7qM0blk","⑤"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"馬のおもちゃの作り方","v":[["Fq0mQnjwcBQ","①"],["NKBzWZYUjQ4","②"],["N3M1R7OaZ0Y","③"],["T2r3SnFnxM8","④"],["ic1668TAtHI","⑤"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"わたしはおねえさん","v":[["Isd6IOQsNfg","①"],["0tTO-iwiq9g","②"],["KjVNMpyozlE","③"],["cxoxb52xA-I","④"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"お話の作者になろう","v":[["FU9mxKOJCQk","①"],["StBLPqVyYTY","②"],["kj-8SbbKyhs","③"],["eyh7tjH0Uhk","④"],["rlc2V0CsmhY","⑤"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"おにごっこ","v":[["jdQD8couXNw","①"],["Dp8mnvR7Pxo","②"],["t9QcAMPBo9w","③"],["Wq9epaRqnvI","④"],["TYEfyibLGpU","⑤"]]},{"s":"国語","p":"ibaraki","b":"光村図書","u":"スーホの白い馬","v":[["30w9eEbRyYU","①"],["l5MLHVxD8Ns","②"],["06zOaLKfP4w","③"],["Rg0m6TXBREw","④"],["38dTXzQ51Vk","⑤"],["g0vq-sOn_yI","⑥"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"すきなこと、なあに","v":[["M4AgLUO1lqQ",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"いくつあつめられるかな","v":[["PPJ6VFOKrQA",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"風のゆうびんやさん","v":[["hDICTy4Q-7s",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"たんぽぽのひみつを見つけよう","v":[["f-LExlt01oI",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"こんなことしているよ","v":[["L30xW7iV-iw","①"],["VYBsjRvhfi4","②"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"外国の小学校について聞こう","v":[["zPi-LJdrbCA","①"],["3l1O1_Qgnyk","②"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"名前を見てちょうだい","v":[["S0XW3D7p19s","①"],["01BeKly-LVo","②"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"かんさつしたことを書こう","v":[["qok2K65nxp4",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"かたかなで 書く ことば","v":[["BxTBSjo8FU8",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"ことばで絵をつたえよう","v":[["HOZ9J7LZJIk",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"サツマイモの育て方","v":[["opFW3WkxP24","①"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"サツマイモのそだて方","v":[["DndD38Hz4kM","②"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"はんたいのいみのことば","v":[["rUudKhS7obU",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"うれしくなることばをあつめよう","v":[["s9t2aLHt5lE",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"ニャーゴ","v":[["xP6YyxvDMM8","①"],["5b-tS0tm_9c","②"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"にたいみのことば","v":[["Wt8ifW28wZQ",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"絵を見てお話を書こう","v":[["wte5Zn_uwgk",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"ビーバーの大工事","v":[["KfrJkMO3zCA","①"],["ugdrGxeOxr0","②"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"主語とじゅつ語","v":[["_UEBJdxOiko",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"あそび方をせつ明しよう","v":[["8_TRL-43Hgc",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"宝物を紹介しよう","v":[["EtuV34nGhRg",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"なかまになることば","v":[["acTvK52XW_g",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"同じところ、ちがうところ","v":[["A_ceaTNJrU8",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"お手紙","v":[["9r-lM3d3Ly0","①"],["GBUCHqyuW5g","②"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"ありがとう」をつたえよう","v":[["Kt2fcnzIIOU",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"かさこじぞう","v":[["qqWtR6BELG0","①"],["UcCc1m_Od4M","②"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"声にだしてみよう","v":[["qLWZzIteCFU",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"おばあちゃんに聞いたよ","v":[["zgpmHepE4r0",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"この人をしょうかいします","v":[["7c3YajMM4vw",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"ことばを広げよう・組み合わせたことば","v":[["eNacS4Af8rM",""]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"あなのやくわり","v":[["vDSodr-F5vk","①"],["fDXABRYJWuo","②"]]},{"s":"国語","p":"ibaraki","b":"東京書籍","u":"すきな場しょを教えよう","v":[["ubZjAdNkMMo",""]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"せいりのしかた","v":[["41P4y7a9bqs","①"],["p4sd5HoDZYs","②"],["69jvtg-tWcY","③"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"2けたのたし算","v":[["SBmc6lrDgX0","①"],["YLQWJIXe4ao","②"],["cVW4ZVV0zGg","③"],["poDQmudU5qk","④"],["xNq5gBgq-tg","⑤"],["RNfId9FsJ38","⑥"],["EFb-MKn4kRI","⑦"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"2けたのひき算","v":[["3rQW80ELi2M","①"],["4zZnVWP1R6E","②"],["kjaf2y0cNwY","③"],["6y2i-whCHkE","④"],["WTQnk-59YbA","⑤"],["bNtnRls3is0","⑥"],["KlFOL__KoGM","⑦"],["zKzSVE1U4L4","⑧"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"長さをしらべよう","v":[["RQZtM8GC0I4","①"],["yFl0xkTj_a0","②"],["SH_z0RbkIhA","③"],["0fxZ1aST8Ks","④"],["u5P5lgczibk","⑤"],["TvTEe6lSsS8","⑥"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"100より大きい数","v":[["bK_n8VzixgM","①"],["6k3tRwfJIKQ","②"],["32IyZlNHkfc","③"],["ZkQk7rIVDzI","④"],["YnlCLX6NWg8","⑤"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"かさのたんい","v":[["U9QSLHDLoSI","①"],["dq2ZE0-btIE","②"],["o3Wtpkf_j_w","③"],["FSzBGciGLjM","④"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"時こくと時間","v":[["7SCDupMaAOM","➀"],["4Sr3gDd5KxI","②"],["uGjQyKAVGTY","➂"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"たし算とひき算のひっ算","v":[["6JOe-kZXpEw","①"],["C2cF7_2Q4io","②"],["2HfiAjvEvsA","③ー1"],["aK8E5A6mhrs","③ー2"],["fPUAjdAzaTc","④"],["df76Aajx1rg","⑤"],["JTHaMWfH3Bs","⑥"],["E0tqJ38F_gA","⑦"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"三角形と四角形","v":[["CAP6nSLAKA0","①"],["JmiMju9pkEo","②"],["au0PgXedza0","③"],["OHEujMDGRSg","④"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"かけ算","v":[["ifp9VWbyBUg","①②"],["0kJ9LOhlTi8","③④"],["6OxutHWRhnw","⑤⑥"],["JO07gsfjHgA","⑦⑧"],["4S1hK-4LHmU","⑨⑩"],["j3fMwYdkKEc","⑪⑫"],["lFh8c4sk9Jw","⑬⑭"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"かけ算九九づくり","v":[["cyNzOPdYQM8","①"],["du_bz_Gjc10","②"],["kKp27Y9ywg8","③"],["qWJfsXEV69w","④"],["B0xbV7VTfOA","⑤"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"長いものの長さの単位","v":[["bI6SOJ-V3rE","①②"],["UrVsfi-6LM8","③"],["_7wfhXZdA5E","④"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"1000より大きい数","v":[["OyHilFmEzjs","①"],["jUcYj7EHzJE","②"],["p6xmq_ELWLk","③"],["PRyN8ckEMLw","④"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"たし算とひき算のかんけい","v":[["qSm4cJfBAjY","①"],["NX_6K5_9LAU","②"],["eJjJ2RNLrfA","③"],["40Gb1uPu8hg","④"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"かけ算のきまり","v":[["R3T5caGivhQ","①"],["a9yMvg4U7CE","②"],["RCupt2qF1S0","③"],["Y9sWRh2rZVE","④"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"分数","v":[["TjUjN_VLZgE","①②"],["QAUZR6DzHio","③④"]]},{"s":"算数","p":"ibaraki","b":"大日本図書","u":"はこの形","v":[["hRgRiB_-Ees","①"],["YXVV93eHSBM","②"]]},{"s":"音楽","p":"ibaraki","b":"","u":"小低学年 はくにあわせてリズムをうとう","v":[["Uf-Tsvla9p8",""]]},{"s":"図画工作","p":"ibaraki","b":"","u":"小中 お家で作品づくり","v":[["GXvZnMB5KI4",""]]},{"s":"図画工作","p":"ibaraki","b":"","u":"02（小学校低学年）","v":[["-dS17VP8gXw",""]]},{"s":"図画工作","p":"ibaraki","b":"","u":"04","v":[["jl9M_gZR0qo",""]]},{"s":"体育","p":"ibaraki","b":"","u":"うんどうのはじめに！（かならずみてね。）","v":[["3nzyRapHtbQ",""]]},{"s":"体育","p":"ibaraki","b":"","u":"保健体育 小学校 体つくり運動（敏捷性・柔軟性）","v":[["8_g1ag17sPQ",""]]},{"s":"体育","p":"ibaraki","b":"","u":"保健体育 小中 体つくり運動（なわとび）","v":[["JrcxSxuqe3g",""]]},{"s":"体育","p":"ibaraki","b":"","u":"保健体育 小学校 体つくり運動（リズムなわとび）","v":[["jSHAYNcbqC8",""]]},{"s":"体育","p":"ibaraki","b":"","u":"体つくり運動系（かた足立ち・かた足をじくに右回り，左回り）","v":[["4JkqpewrKKU",""]]},{"s":"体育","p":"ibaraki","b":"","u":"器械運動系（前転がり・前転）","v":[["JjTKI5oZUCU",""]]},{"s":"体育","p":"ibaraki","b":"","u":"陸上運動系（走るときのうでふり）","v":[["WDToBrBBFNE",""]]},{"s":"体育","p":"ibaraki","b":"","u":"水泳運動系（手のかきやキックの陸上での練習）","v":[["lcTYuNL1pRY",""]]},{"s":"体育","p":"ibaraki","b":"","u":"ボール運動系（ボールを転がしたり，投げたり）","v":[["xKpQyEZu814",""]]},{"s":"体育","p":"ibaraki","b":"","u":"体つくり運動系（ボールの投げ上げ）","v":[["hHccg7woEBI",""]]},{"s":"体育","p":"ibaraki","b":"","u":"器械運動系（後ろ転がり・後転）","v":[["keeDQ4QQ57U",""]]},{"s":"体育","p":"ibaraki","b":"","u":"陸上運動系（前方向や上方向にジャンプ）","v":[["esb4464jYoI",""]]},{"s":"体育","p":"ibaraki","b":"","u":"ボール運動系（ボールをはじいたり，打ったり）","v":[["AYWgPVoYrH0",""]]},{"s":"体育","p":"ibaraki","b":"","u":"いきいき茨城ゆめ国体ダンス","v":[["Uw7y05LdDeA",""]]},{"s":"体育","p":"ibaraki","b":"","u":"体つくり運動系（階段などを使って踏み台昇降）","v":[["NchEsUm921A",""]]},{"s":"体育","p":"ibaraki","b":"","u":"器械運動系（ブリッジ）","v":[["snLGQYDnB-A",""]]},{"s":"体育","p":"ibaraki","b":"","u":"陸上運動系（床に座って，ハードル走のフォーム練習）","v":[["Duu4tRrjg1Y",""]]},{"s":"体育","p":"ibaraki","b":"","u":"ボール運動系（ボールをけったり，ドリブルをしたり）","v":[["ViaGrt1OvO4",""]]},{"s":"体育","p":"ibaraki","b":"","u":"体つくり運動系（タオルを使って曲げ伸ばし）","v":[["uPm3ssvXVG0",""]]},{"s":"体育","p":"ibaraki","b":"","u":"器械運動系（かえるの逆立ち・背支持倒立（首倒立）・頭倒立）","v":[["2plNw2tfNHM",""]]},{"s":"体育","p":"ibaraki","b":"","u":"陸上運動系（タオルを使って投球のフォーム練習）","v":[["2tRPeJ_XHH4",""]]},{"s":"体育","p":"ibaraki","b":"","u":"ボール運動系（バットやラケットで素振り）","v":[["lB9hR4JjgOQ",""]]},{"s":"体育","p":"ibaraki","b":"","u":"体つくり運動系（チャレンジ編）","v":[["jBb--CBJ-6M",""]]},{"s":"国語","p":"chiba","b":"光村図書","u":"じゅぎょう どうが","v":[["pKE0V8S6JZU","1-1"],["3qzFWHXYSpE","1-2"],["KwrjDYSBktM","1-3"],["AgmBtXDRWp4","2-1"],["TN5xMq6atiI","2-2"],["4Z3ZuWIAsjw","3-1"],["_RLMKbE3Z-I","3-2"],["PEhCHqGlYWw","3-3"]]},{"s":"国語","p":"chiba","b":"光村図書","u":"それをいかして書こう","v":[["Io0ZCQkHjIA","1本目"],["k-qG98SWsmU","2本目"],["xMtR7x-rck0","3本目"],["OihFhI4lyNU","4本目"]]},{"s":"国語","p":"chiba","b":"光村図書","u":"見たこと、かんじたこと","v":[["McoO1uIEM8I","1本目"],["tI0CMOc3cgw","2本目"],["KfQmPQlf-Yc","3本目"]]},{"s":"国語","p":"chiba","b":"光村図書","u":"馬のおもちゃのつくりかた","v":[["HwTwLwHb4o0","1本目"]]},{"s":"国語","p":"chiba","b":"光村図書","u":"学習プリント","v":[["BajJBhKE91c","2本目"],["ZEAN9g-k__M","3本目"]]},{"s":"国語","p":"chiba","b":"教育出版","u":"じゅぎょう どうが","v":[["MPkTW_t-UQ4","3-1"],["9jxcl014Jq8","3-2"],["svcT_8uBaD8","7-1"],["znHAoWKuieA","7-2"],["z7fxXPOVjZM","10"]]},{"s":"国語","p":"chiba","b":"教育出版","u":"だれが、どのようにかわったかを考えて読もう","v":[["Py1Dg_Hp1cg","1本目"],["4Lsq4UWrDL8","2本目"],["pPkzIxoVUjE","3本目"],["jzhRuzG2qo0","4本目"]]},{"s":"国語","p":"chiba","b":"教育出版","u":"こんなことができるようになったよ","v":[["g2yTTTZMnMg","1本目"],["qu7_aZAjJRc","2本目"],["LPhsmbSvSVU","3本目"],["j9oYJ0KHqPg","4本目"]]},{"s":"算数","p":"chiba","b":"啓林館","u":"じゅぎょう どうが","v":[["dDZQpuZuUVg","1-1"],["HasNW6c27Js","1-2"],["sx8vS29W2Tw","1-3"],["fJ4GsLv5T24","2-1"],["HZ7hUkrTY6E","2-2"],["3sx0ykTotqY","2-3"],["_Pmu54kMpbY","2-4"]]},{"s":"算数","p":"chiba","b":"啓林館","u":"かけ算（１）","v":[["14YMgKE_jlE","1本目"],["G41M5jP468g","2本目"],["Z-q06NCr_80","3本目"],["Gn1QvEjXFIk","4本目"],["h-j8r35vBzQ","5本目"]]},{"s":"算数","p":"chiba","b":"啓林館","u":"はこの形","v":[["8JwHvDSSfJQ","1本目"],["W-5k4GnQH9o","2本目"],["ATRUc8uXjKc","3本目"],["tEy5I345wSI","4本目"]]},{"s":"算数","p":"chiba","b":"東京書籍","u":"じゅぎょう どうが","v":[["OxW_eD0gSvY","1-1"],["DoeDML-UJJA","1-2"],["Hz3jEpLdINY","1-3"],["Rpuw5epFvts","2-1"],["F9ykxrdCu5s","2-2"],["nPjKyCxJj_g","2-3"],["BmnH2zG91Pw","3-1"],["5-RchRIM3TA","3-2"],["2CiWOoaKR3o","3-3"]]},{"s":"算数","p":"chiba","b":"東京書籍","u":"図をつかって考えよう（たし算とひき算）","v":[["av77JFFpJuQ","1本目"],["g9U6wEo_--Q","2本目"],["JB0nITz0P_8","3本目"],["bDUHkQrIBUo","4本目"],["PbgE5b_pUnc","5本目"]]},{"s":"算数","p":"chiba","b":"東京書籍","u":"分け方大きさのあらわし方をしらべよう（分数）","v":[["wv9adYbgg3k","1本目"],["Wf0umbVAgE8","2本目"],["gd0yJIZmtAw","3本目"],["q6A8eenU3hA","4本目"],["wEVPNkeW27M","5本目"]]},{"s":"算数","p":"chiba","b":"東京書籍","u":"新しい計算を考えよう－かけ算（１）","v":[["sTsJ810n6bs","1本目"],["RL6SB6IyTQo","2本目"],["uor2QAeMKNw","3本目"],["xJiRgtIyQec","4本目"],["OVfEa3bhi40","5本目"]]},{"s":"生活","p":"chiba","b":"大日本図書","u":"じゅぎょう どうが","v":[["p6_hEv7J53M","1-1"],["IWXwhnMpMb8","2-1"]]},{"s":"生活","p":"chiba","b":"啓林館","u":"じゅぎょう どうが","v":[["kC5Tsrkt8Fg","1-1"],["JBumXiU-zpU","1-2"],["K39GUgYNwMY","2-1"],["9gzNu0zJtPg","2-2"],["nO2E9ND0-Zk","2-3"],["CsPL06kKVTM","2-4"]]},{"s":"生活","p":"chiba","b":"教育出版","u":"じゅぎょう どうが","v":[["AzhWFYFzDvY","1-1"],["bJrdDLjW5hQ","2-1"],["SOevAhGiEms","2-2"],["ZrUduxtiOb8","2-3"]]},{"s":"音楽","p":"chiba","b":"教育芸術社","u":"じゅぎょう どうが","v":[["UlX5ZQWVLr0","1-1"],["0eZyJVjeIKc","1-2"],["CAMcN87WLyY","2-2"]]},{"s":"音楽","p":"chiba","b":"教育出版","u":"じゅぎょう どうが","v":[["ydRcYP5aq2U","1-1"],["5B99UP7GK1I","1-2"],["o2RH92WO1Bs","2-1"],["zZfw8bue2wE","2-2"],["e4nYOo2nG1A","2-3"]]},{"s":"図画工作","p":"chiba","b":"日本文教出版","u":"じゅぎょう どうが","v":[["d4z2JRfT1DM","1-1"],["FYmxRxvu6UQ","2-1"]]},{"s":"図画工作","p":"chiba","b":"開隆堂","u":"じゅぎょう どうが","v":[["bwOZ4zFOSH8","2-1"],["L3mZ0izI3T0","2-1"]]},{"s":"国語","p":"gunma","b":"","u":"主語と述語をつかって書いてみよう","v":[["6TeFbf5A-rU",""]]},{"s":"算数","p":"gunma","b":"","u":"はこの形","v":[["x0ebwx2bJQs",""]]},{"s":"算数","p":"gunma","b":"","u":"分けた大きさのあらわし方","v":[["eQgyqTyZvh8",""]]}];
+const QUIZ = [{"key":"ふきのとう","match":["ふきのとう"],"book":"光村図書","qs":[{"q":"ふきのとうは、さいしょ どこに いましたか。","c":["雪の 下","竹やぶの 上","川の 中"],"a":0,"hint":"まだ そとが 見えない ところに いたよ。","why":"ふきのとうは 雪の 下に いて、そとを 見たいと おもって いました。"},{"q":"雪が とけられなかったのは なぜですか。","c":["竹やぶの かげで、お日さまが あたらないから","ふきのとうが おさえて いたから","よるで まっくらだったから"],"a":0,"hint":"雪の 上には なにが ありましたか。","why":"竹やぶの かげに なって、お日さまの ひかりが とどかなかったからです。"},{"q":"はるかぜを おこしたのは だれですか。","c":["お日さま","雪","ふきのとう"],"a":0,"hint":"空の 上から みんなを 見て いた ものだよ。","why":"お日さまが はるかぜを おこして、ふかせました。"},{"q":"はるかぜが ふいた あと、どう なりましたか。","c":["竹やぶが ゆれて 日が あたり、雪が とけて、ふきのとうが かおを 出した","雪が もっと ふって きた","ふきのとうが ねむって しまった"],"a":0,"hint":"竹やぶ、雪、ふきのとうの じゅんに かんがえてみよう。","why":"竹やぶが ゆれて お日さまが あたり、雪が とけて、ふきのとうが そとに かおを 出しました。"}]},{"key":"たんぽぽの ちえ","match":["たんぽぽの ちえ"],"book":"光村図書","qs":[{"q":"花が しぼむと、たんぽぽの じくは どう なりますか。","c":["ぐったりと じめんに たおれる","ぐんぐん 高く のびる","まっ赤に なる"],"a":0,"hint":"花が おわった すぐ あとの ようすだよ。","why":"じくは ぐったりと じめんに たおれます。たおれて いる あいだに、たねに えいようを おくって います。"},{"q":"白い わた毛が できると、じくは どう なりますか。","c":["おき上がって、高く のびる","かれて なくなる","みじかく ちぢむ"],"a":0,"hint":"たおれて いた じくが、また……","why":"じくは また おき上がり、せのびを するように 高く のびて いきます。"},{"q":"じくが 高く のびるのは なんの ためですか。","c":["わた毛に 風が よく あたって、たねを 遠くまで とばせるように","花を もういちど さかせる ため","虫から かくれる ため"],"a":0,"hint":"高い ところの ほうが、なにが よく あたるかな。","why":"高い ほうが 風が よく あたるので、たねを 遠くまで とばせるからです。"},{"q":"雨の 日、わた毛は どう なりますか。","c":["すぼんで しまう","大きく ひらく","色が かわる"],"a":0,"hint":"ぬれて おもく なると、たねは とばせないね。","why":"しめり気が 多い 日や 雨の 日は、わた毛が すぼみます。たねを 遠くまで とばせないからです。"}]},{"key":"スイミー","match":["スイミー"],"book":"光村図書","qs":[{"q":"スイミーは、きょうだいたちと どこが ちがって いましたか。","c":["ひとりだけ まっくろで、およぐのが いちばん はやい","ひとりだけ 体が 大きい","ひとりだけ 空を とべる"],"a":0,"hint":"きょうだいたちは みんな 赤い 色だったね。","why":"きょうだいたちは みんな 赤いのに、スイミーだけ まっくろでした。およぐのも だれより はやかったです。"},{"q":"スイミーが ひとりぼっちに なったのは なぜですか。","c":["大きな まぐろに、きょうだいたちが のみこまれたから","まいごに なったから","けんかを したから"],"a":0,"hint":"こわい 魚が やって きたね。","why":"まぐろが きょうだいたちを のみこんで しまい、にげられたのは スイミーだけでした。"},{"q":"スイミーが また 元気に なったのは なぜですか。","c":["海で すばらしい ものや おもしろい ものを 見たから","たくさん ごはんを たべたから","ずっと ねて いたから"],"a":0,"hint":"くらげや いせえびに 出会ったね。","why":"くらげや いせえび、こんぶや わかめの 林など、海の すばらしい ものを 見て、だんだん 元気に なりました。"},{"q":"みんなで 大きな 魚の ふりを した とき、スイミーは なにに なりましたか。","c":["目","しっぽ","ひれ"],"a":0,"hint":"スイミーだけ 色が ちがうよね。","why":"まっくろな スイミーは、大きな 魚の 目に なりました。"}]},{"key":"お手紙","match":["お手紙"],"book":"光村図書・東京書籍","qs":[{"q":"がまくんが かなしかったのは なぜですか。","c":["いちども お手紙を もらった ことが ないから","かえるくんと けんかしたから","かぜを ひいたから"],"a":0,"hint":"がまくんは ゆうびんうけの 前で まって いたね。","why":"がまくんは、まだ いちども お手紙を もらった ことが なかったからです。"},{"q":"かえるくんが 書いた お手紙を はこんだのは だれですか。","c":["かたつむりくん","かえるくん","とりさん"],"a":0,"hint":"ゆっくり ゆっくり すすむ 生きものだよ。","why":"かえるくんは、お手紙を かたつむりくんに わたしました。"},{"q":"お手紙には どんな ことが 書いて ありましたか。","c":["がまくんが しんゆうで うれしい という こと","はやく あそびに きて という こと","おかしを ちょうだい という こと"],"a":0,"hint":"ふたりは どんな なかよしかな。","why":"かえるくんは、がまくんが じぶんの しんゆうで うれしい という きもちを 書きました。"},{"q":"お手紙が とどくまで、ふたりは どう して いましたか。","c":["げんかんで いっしょに まって いた","べつべつの いえで ねて いた","さがしに 出かけて いた"],"a":0,"hint":"ふたりとも とても しあわせな 気もちで……","why":"ふたりは げんかんに 出て、しあわせな 気もちで お手紙を まって いました。とどいたのは 4日 たってからです。"}]},{"key":"スーホの白い馬","match":["スーホの白い馬"],"book":"光村図書","qs":[{"q":"スーホは、白い 子馬を どう やって 見つけましたか。","c":["生まれた ばかりで たおれて いたのを だいて かえった","お店で かった","とのさまに もらった"],"a":0,"hint":"ある日の 帰り道の ことだよ。","why":"スーホは、生まれた ばかりの 白い 子馬を 見つけて、だいて つれて かえりました。"},{"q":"白馬が おおかみから まもったのは なんですか。","c":["ひつじ","とのさま","お金"],"a":0,"hint":"スーホは ひつじかいの 子どもだね。","why":"白馬は おおかみの 前に 立ちふさがって、ひつじを まもりました。"},{"q":"けい馬の 大会で 白馬が 一ばんに なった あと、とのさまは どう しましたか。","c":["やくそくを まもらず、白馬を とり上げた","スーホを ほめて 家に かえした","白馬と スーホに ごちそうした"],"a":0,"hint":"とのさまは やくそくを まもったかな。","why":"とのさまは やくそくを まもらず、ぎんかを わたして 白馬を とり上げて しまいました。"},{"q":"白馬が しんだ あと、スーホは なにを 作りましたか。","c":["がっき","いえ","くるま"],"a":0,"hint":"白馬が ゆめの 中で つくり方を おしえて くれたね。","why":"スーホは 白馬の ほねや かわを つかって がっきを 作りました。これが 馬頭琴（ばとうきん）です。"}]},{"key":"かさこじぞう","match":["かさこじぞう"],"book":"東京書籍","qs":[{"q":"じいさまは、なにを 売りに 町へ 行きましたか。","c":["すげがさ","おもち","まき"],"a":0,"hint":"ばあさまと いっしょに あんだ ものだよ。","why":"じいさまと ばあさまは すげがさを あんで、じいさまが 町へ 売りに 行きました。"},{"q":"かさは 売れましたか。","c":["ひとつも 売れなかった","ぜんぶ 売れた","はんぶん 売れた"],"a":0,"hint":"じいさまは そのまま もって かえったね。","why":"かさは ひとつも 売れませんでした。"},{"q":"じいさまは、雪の 中の じぞうさまに なにを しましたか。","c":["かさを かぶせて あげた","おもちを あげた","いえに つれて かえった"],"a":0,"hint":"じぞうさまの あたまに 雪が つもって いたね。","why":"じいさまは 売れなかった かさを、じぞうさまに かぶせて あげました。"},{"q":"かさが ひとつ たりなかった とき、じいさまは どう しましたか。","c":["じぶんの 手ぬぐいを かぶせた","そのまま にした","ばあさまを よびに かえった"],"a":0,"hint":"じいさまが じぶんで つけて いた ものだよ。","why":"じいさまは じぶんの 手ぬぐいを、さいごの じぞうさまに かぶせました。"}]}];
 const SUBJ = [
   ["国語","こくご","--kokugo"],["算数","さんすう","--sansu"],["生活","せいかつ","--seikatsu"],
   ["音楽","おんがく","--ongaku"],["図画工作","ずこう","--zuko"],["体育","たいいく","--taiiku"]];
@@ -259,12 +292,81 @@ function render(){
       const st=document.createElement("div"); st.className="tiles";
       g.v.forEach((_,i)=>st.appendChild(tile(g,i)));
       c.appendChild(st);
+      const qz=quizFor(g);
+      if(qz){
+        const qb=document.createElement("button"); qb.type="button"; qb.className="qbtn";
+        const best=bestScore[qz.key];
+        qb.innerHTML="✎ もんだいに ちょうせん"+(best!=null?'<span class="best">さいこう '+best+"/"+qz.qs.length+"</span>":"");
+        qb.addEventListener("click",()=>openQuiz(qz));
+        c.appendChild(qb);
+      }
       box.appendChild(c);
     }
     list.appendChild(box);
   }
   if(!any){const p=document.createElement("p");p.className="empty";p.textContent="このきょうかしょの どうがは ありません。";list.appendChild(p)}
 }
+
+let bestScore = store.get("quiz",{});
+function quizFor(g){const name=cleanTitle(g.u);return g.s==="国語"&&QUIZ.find(q=>q.match.some(m=>name===m))}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+let qs=null;
+function openQuiz(qz){
+  qs={qz,i:0,first:0,tried:false,last:document.activeElement};
+  $("#quiz").hidden=false; document.body.style.overflow="hidden";
+  showQ();
+}
+function closeQuiz(){$("#quiz").hidden=true;document.body.style.overflow="";const l=qs&&qs.last;qs=null;render();if(l&&document.contains(l))l.focus()}
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function head(){
+  const h=el("div","qhead");const b=el("b",null,"「"+qs.qz.key+"」");b.id="qtitle";
+  const x=el("button","btn","とじる");x.type="button";x.onclick=closeQuiz;
+  h.append(b,x);return h;
+}
+function showQ(){
+  const box=$("#qbox");box.innerHTML="";
+  const q=qs.qz.qs[qs.i];qs.tried=false;
+  box.append(head(),el("div","qprog",(qs.i+1)+" / "+qs.qz.qs.length+" もんめ"),el("p","qq",q.q));
+  const list=el("div","qchoices");const msg=el("div","qmsg");msg.hidden=true;const foot=el("div","qfoot");
+  const order=shuffle(q.c.map((c,i)=>i));
+  for(const i of order){
+    const b=el("button","qc",q.c[i]);b.type="button";
+    b.onclick=()=>{
+      if(i===q.a){
+        if(!qs.tried)qs.first++;
+        list.querySelectorAll(".qc").forEach(x=>x.disabled=true);b.classList.add("yes");
+        msg.className="qmsg";msg.innerHTML="";msg.append(el("strong",null,qs.tried?"せいかい！":"せいかい！ はなまる！"),q.why);msg.hidden=false;
+        const n=el("button","btn main",qs.i<qs.qz.qs.length-1?"つぎの もんだい ▶":"けっかを 見る");n.type="button";
+        n.onclick=()=>{qs.i++;qs.i<qs.qz.qs.length?showQ():showEnd()};foot.innerHTML="";foot.append(n);n.focus();
+      }else{
+        qs.tried=true;b.disabled=true;b.classList.add("no","shake");
+        msg.className="qmsg hint";msg.innerHTML="";msg.append(el("strong",null,"おしい！ もういちど かんがえてみよう"),"ヒント："+q.hint);msg.hidden=false;
+      }
+    };
+    list.append(b);
+  }
+  box.append(list,msg,foot);
+  list.querySelector(".qc").focus();
+}
+function showEnd(){
+  const n=qs.qz.qs.length,f=qs.first;
+  if(bestScore[qs.qz.key]==null||f>bestScore[qs.qz.key]){bestScore[qs.qz.key]=f;store.set("quiz",bestScore)}
+  const box=$("#qbox");box.innerHTML="";
+  const end=el("div","qend");
+  end.append(el("div","hanamaru",f===n?"よく<br>できました":""));
+  end.firstChild.innerHTML=f===n?"よく<br>でき<br>ました":f+"/"+n;
+  end.firstChild.style.fontSize=f===n?"1.1rem":"2rem";end.firstChild.style.lineHeight="1.2";end.firstChild.style.textAlign="center";
+  end.append(el("p",null,n+"もんの うち "+f+"もん、1かいめで せいかい！"),
+    el("p",null,f===n?"すごい！ ぜんぶ 1かいで できたね。":"どうがを もういちど 見てから ちょうせんしても いいよ。"));
+  const foot=el("div","qfoot");
+  const again=el("button","btn main","もういちど");again.type="button";again.onclick=()=>openQuiz(qs.qz);
+  const close=el("button","btn","おわる");close.type="button";close.onclick=closeQuiz;
+  foot.append(again,close);
+  box.append(head(),end,foot);again.focus();
+}
+$("#quiz").addEventListener("click",e=>{if(e.target.id==="quiz")closeQuiz()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&qs)closeQuiz()});
+
 $("#book").addEventListener("change",e=>{books[cur]=e.target.value;store.set("books",books);render()});
 $("#omakase").addEventListener("click",()=>{
   const pool=[];
