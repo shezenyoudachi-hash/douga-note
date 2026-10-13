@@ -121,10 +121,13 @@ footer ul{margin:0;padding-left:1.2em}
 .qmsg.hint strong{color:var(--soft)}
 .qfoot{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
 .qfoot .btn.main{background:var(--kokugo);border-color:var(--kokugo);color:var(--paper)}
-.hanamaru{width:120px;height:120px;margin:0 auto;border-radius:50%;border:6px solid var(--hana);display:flex;align-items:center;justify-content:center;font-family:var(--f-book);font-size:2rem;font-weight:600;color:var(--hana);
-  -webkit-mask:conic-gradient(#000 0 335deg,transparent 335deg);mask:conic-gradient(#000 0 335deg,transparent 335deg)}
+.hanamaru{position:relative;width:150px;height:150px;margin:0 auto;display:flex;align-items:center;justify-content:center;text-align:center;font-family:var(--f-book);font-weight:600;color:var(--hana);line-height:1.25}
+.hanamaru::before{content:"";position:absolute;inset:0;border-radius:50%;border:6px solid var(--hana);
+  -webkit-mask:conic-gradient(from 40deg,#000 0 335deg,transparent 335deg);mask:conic-gradient(from 40deg,#000 0 335deg,transparent 335deg)}
+.hanamaru.full{font-size:1.3rem}
+.hanamaru.part{font-size:2.2rem}
 .qend{text-align:center;display:flex;flex-direction:column;gap:10px}
-.qend p{margin:0;font-size:1.1rem;font-weight:700}
+.qend p{margin:0;font-size:1.1rem;font-weight:700;text-wrap:balance;word-break:keep-all;overflow-wrap:anywhere}
 @media (prefers-reduced-motion:no-preference){.qc.shake{animation:shake .3s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}}
 </style>
 </head>
@@ -361,9 +364,9 @@ function showEnd(){
   if(bestScore[qs.qz.key]==null||f>bestScore[qs.qz.key]){bestScore[qs.qz.key]=f;store.set("quiz",bestScore)}
   const box=$("#qbox");box.innerHTML="";
   const end=el("div","qend");
-  end.append(el("div","hanamaru",f===n?"よく<br>できました":""));
-  end.firstChild.innerHTML=f===n?"よく<br>でき<br>ました":f+"/"+n;
-  end.firstChild.style.fontSize=f===n?"1.1rem":"2rem";end.firstChild.style.lineHeight="1.2";end.firstChild.style.textAlign="center";
+  const hm=el("div","hanamaru "+(f===n?"full":"part"));
+  hm.innerHTML=f===n?"よく<br>できました":f+"/"+n;
+  end.append(hm);
   end.append(el("p",null,n+"もんの うち "+f+"もん、1かいめで せいかい！"),
     el("p",null,f===n?"すごい！ ぜんぶ 1かいで できたね。":"どうがを もういちど 見てから ちょうせんしても いいよ。"));
   const foot=el("div","qfoot");
